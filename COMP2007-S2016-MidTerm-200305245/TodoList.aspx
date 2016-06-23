@@ -26,9 +26,16 @@
                     OnSorting="TodoGridView_Sorting" OnRowDataBound="TodoGridView_RowDataBound"
                     PagerStyle-CssClass="pagination-ys">
                     <Columns>
-                        <asp:BoundField DataField="TodoID" HeaderText="Todo ID" Visible="true" SortExpression="TodoID" />
+                        <asp:BoundField DataField="TodoID" HeaderText="Todo ID" Visible="false" SortExpression="TodoID" />
                         <asp:BoundField DataField="TodoName" HeaderText="Todo Name" Visible="true" SortExpression="TodoName" />
                         <asp:BoundField DataField="TodoNotes" HeaderText="Todo Notes" Visible="true" SortExpression="TodoNotes" />
+                        <asp:TemplateField  HeaderText="Completed" Visible="true">
+            <ItemTemplate >
+                <asp:CheckBox   
+                     ID="CheckBox" runat="server" AutoPostBack="true" 
+              OnCheckedChanged="CheckBox_CheckedChanged1" />
+            </ItemTemplate>
+        </asp:TemplateField>
                         
                         <asp:HyperLinkField HeaderText="Edit" Text="<i class='fa fa-pencil-square-o fa-lg'></i> Edit" 
                             NavigateUrl="TodoDetails.aspx.cs" ControlStyle-CssClass="btn btn-primary btn-sm" runat="server"

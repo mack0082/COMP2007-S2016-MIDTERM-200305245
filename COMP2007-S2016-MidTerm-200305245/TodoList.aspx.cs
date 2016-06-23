@@ -16,7 +16,7 @@ namespace COMP2007_S2016_MidTerm_200305245
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            // if loading the page for the first time, populate the student grid
+            // if loading the page for the first time, populate the todo grid
             if (!IsPostBack)
             {
                 Session["SortColumn"] = "TodoID"; // default sort column
@@ -26,9 +26,17 @@ namespace COMP2007_S2016_MidTerm_200305245
             }
         }
 
+        /**
+        * <summary>
+        * This method gets the todo data from the DB
+        * </summary>
+        * 
+        * @method GetTodos
+        * @returns {void}
+        */
         private void GetTodos()
         {
-            // connect to EF
+            // connect to Todo db
             using (TodoConnection db = new TodoConnection())
             {
                 string SortString = Session["SortColumn"].ToString() + " " + Session["SortDirection"].ToString();
@@ -52,23 +60,34 @@ namespace COMP2007_S2016_MidTerm_200305245
             this.GetTodos();
         }
 
+        /**
+        * <summary>
+        * This event handler deletes a todo from the db 
+        * </summary>
+        * 
+        * @method TodoGridView_RowDeleting
+        * @param {object} sender
+        * @param {GridViewDeleteEventArgs} e
+        * @returns {void}
+        */
+
         protected void TodoGridView_RowDeleting(object sender, GridViewDeleteEventArgs e)
         {
             // store which row was clicked
             int selectedRow = e.RowIndex;
 
-            // get the selected StudentID using the Grid's DataKey collection
+            // get the selected TodoID using the Grid's DataKey collection
             int TodoID = Convert.ToInt32(TodoGridView.DataKeys[selectedRow].Values["TodoID"]);
 
             // use EF to find the selected student in the DB and remove it
             using (TodoConnection db = new TodoConnection())
             {
-                // create object of the Student class and store the query string inside of it
+                // create object of the Todo class and store the query string inside of it
                 Todo deletedTodo = (from todoRecords in db.Todos
                                     where todoRecords.TodoID == TodoID
                                     select todoRecords).FirstOrDefault();
 
-                // remove the selected student from the db
+                // remove the selected todo from the db
                    db.Todos.Remove(deletedTodo);
 
                 // save my changes back to the database
@@ -79,6 +98,16 @@ namespace COMP2007_S2016_MidTerm_200305245
             }
         }
 
+        /**
+         * <summary>
+         * This event handler allows pagination to occur for the Todo page
+         * </summary>
+         * 
+         * @method TodoGridView_PageIndexChanging
+         * @param {object} sender
+         * @param {GridViewPageEventArgs} e
+         * @returns {void}
+         */
         protected void TodoGridView_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             // Set the new page number
@@ -126,6 +155,13 @@ namespace COMP2007_S2016_MidTerm_200305245
                     }
                 }
             }
+        }
+
+
+      
+        protected void CheckBox_CheckedChanged1(object sender, EventArgs e)
+        {
+           
         }
     }
 }
